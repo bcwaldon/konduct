@@ -230,7 +230,7 @@ datadog_enabled: false
 #datadog_api_key:
 
 # signalfx_enabled controls whether or not the SignalFX agent should be
-# deployed across the cluster. If true, signalfx_api_key must be set.
+# deployed to the cluster. If true, signalfx_api_key must be set.
 signalfx_enabled: false
 
 # signalfx_api_key is the API key that the SignalFX agent will use to
