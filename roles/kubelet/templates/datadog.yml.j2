@@ -35,6 +35,8 @@ spec:
         value: "{{ec2_private_ip_address}}:10255"
       - name: KUBE_DATADOG_SOURCE
         value: kubelet
+      - name: KUBE_DATADOG_DOGSTATSD
+        value: 127.0.0.1:8126
   volumes:
     - hostPath:
         path: /var/run/docker.sock
