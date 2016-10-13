@@ -25,9 +25,9 @@ spec:
         - name: SYSLOG_FORMAT
           value: rfc3164
         - name: SYSLOG_HOSTNAME
-          value: "{{ index .Container.Config.Labels 'io.kubernetes.pod.namespace' }}"
+          value: "{% raw %}{{ index .Container.Config.Labels 'io.kubernetes.pod.namespace' }}{% endraw %}"
         - name: SYSLOG_TAG
-          value: klondike-{{ cluster }}-"{{ index .Container.Config.Labels 'io.kubernetes.pod.namespace' }}-{{ index .Container.Config.Labels 'io.kubernetes.pod.name' }}"
+          value: "klondike-{{ cluster }}-{% raw %}{{ index .Container.Config.Labels 'io.kubernetes.pod.namespace' }}-{{ index .Container.Config.Labels 'io.kubernetes.pod.name' }}{% endraw %}"
       volumes:
       - name: docker-sock
         hostPath:
