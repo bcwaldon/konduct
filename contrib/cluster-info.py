@@ -23,6 +23,14 @@ def get_stack_info(cfn_client, cluster):
     cfn_resp = cfn_client.describe_stacks(StackName=stack_name)
 
     info['stack_status'] = cfn_resp['Stacks'][0]['StackStatus']
+
+    dns_records = []
+    cfn_resp = cfn_client.describe_stack_resources(StackName=stack_name)
+    for resource in cfn_resp['StackResources']:
+        if resource['ResourceType'] == 'AWS::Route53::RecordSet':
+            dns_records.append(resource['PhysicalResourceId'])
+    info['stack_dns'] = dns_records
+
     return info
 
 
