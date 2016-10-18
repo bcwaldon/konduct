@@ -39,4 +39,4 @@ spec:
         - name: KUBE_DATADOG_SOURCE
           value: api
         - name: KUBE_DATADOG_DOGSTATSD
-          value: 127.0.0.1:8126
+          value: {{ datadog_statsd_host }}
