@@ -6,8 +6,14 @@
   with_items:
   - kube-system.yml
   - dns.yml
-  - datadog.yml
+  - kube-datadog.yml
   - dashboard.yml
+
+- name: deploy datadog-agent
+  include: deploy.yml
+  when: datadog_statsd_host == "127.0.0.1:8125"
+  with_items:
+  - datadog.yml
 
 - name: deploy signalfx
   include: deploy.yml

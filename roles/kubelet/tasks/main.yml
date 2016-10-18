@@ -64,12 +64,20 @@
   service: name=docker.socket state=started enabled=yes
   sudo: true
 
-- name: deploy datadog
+- name: deploy kube-datadog
   when: datadog_enabled
   template: src={{ item.src }}.j2 dest={{ item.dest }}/{{ item.src }} mode=0644
   sudo: true
   with_items:
-  - src: "datadog.yml"
+  - src: "kube-datadog.yml"
+    dest: "/etc/kubernetes/manifests"
+
+- name: deploy datadog-agent
+  when: (datadog_enabled and datadog_statsd_host == "127.0.0.1:8125")
+  template: src={{ item.src }}.j2 dest={{ item.dest }}/{{ item.src }} mode=0644
+  sudo: true
+  with_items:
+  - src: "datadog-agent.yml"
     dest: "/etc/kubernetes/manifests"
 
 - name: deploy logspout
