@@ -1,3 +1,18 @@
+#
+# Copyright 2016 Planet Labs
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#   http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
 - set_fact:
     deploy_key_file: "{{ cluster_dir}}/id_rsa"
 
@@ -15,7 +30,12 @@
 
 - set_fact:
     deploy_key: "{{ shell.stdout }}"
-    log_aggregator_host: "logs.{{ aws_hosted_zone }}"
+
+- name: Identify git version
+  command: "{{ item }}"
+  with_items:
+  - bash ./roles/configure/files/git-tag.sh
+  register: version
 
 - name: render templated files
   template: src={{ item.src }} dest={{ cluster_dir }}/{{ item.dest }} mode={{ item.mode }}
@@ -24,7 +44,6 @@
   - { src: "ansible.cfg.j2", dest: "ansible.cfg", mode: "0644"}
   - { src: "ec2.ini.j2", dest: "ec2.ini", mode: "0644"}
   - { src: "cloud-config.yml.j2", dest: "cloud-config.yml", mode: "0644"}
-  - { src: "aggregator-cloud-config.yml.j2", dest: "aggregator-cloud-config.yml", mode: "0644"}
   - { src: "bastion-cloud-config.yml.j2", dest: "bastion-cloud-config.yml", mode: "0644"}
   - { src: "create-stack.sh.j2", dest: "create-stack.sh", mode: "0755"}
   - { src: "kubeconfig.j2", dest: "kubeconfig", mode: "0644"}

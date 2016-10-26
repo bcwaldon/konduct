@@ -1,3 +1,18 @@
+#
+# Copyright 2016 Planet Labs
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#   http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
 # s3_config_bucket is the S3 bucket that this cluster should use
 # to store its cluster config data. This data contains cluster
 # secrets, so access to this bucket must be restricted to those
@@ -68,9 +83,10 @@ aws_hosted_zone:
 # administrative host, so it does not need a large amount of storage
 # or compute resources.
 #
-# These instances must support the EBS-optimized boot flag.
 # It is suggested that m4 or c4 instances are used, as these
 # there is no additional cost to support EBS optimization.
+# If a non-EBS optimzied instance is used, make sure to set
+# bastion_instance_ebs_optimized to false.
 bastion_instance_type: m4.large
 
 # bastion_instance_root_disk_size_gb controls the size of the root
@@ -78,25 +94,17 @@ bastion_instance_type: m4.large
 # disk is a gp2 EBS volume, not instance storage.
 bastion_instance_root_disk_size_gb: 32
 
-# aggregator_instance_type is the instance type used when deploying
-# EC2 instances as log aggregators in your cluster.
-#
-# These instances must support the EBS-optimized boot flag.
-# It is suggested that m4 or c4 instances are used, as these
-# there is no additional cost to support EBS optimization.
-aggregator_instance_type: m4.large
-
-# aggregator_instance_root_disk_size_gb controls the size of the root
-# disk provisioned for the aggregator instance (in GB). The underlying
-# disk is a gp2 EBS volume, not instance storage.
-aggregator_instance_root_disk_size_gb: 128
+# bastion_instance_ebs_optimized controls whether or not the instance
+# is provisioned as an EBS-optimized instance. This defaults to true.
+bastion_instance_ebs_optimized: true
 
 # gateway_instance_type is the instance type used when deploying
 # EC2 instances for Kubernetes service ingress traffic.
 #
-# These instances must support the EBS-optimized boot flag.
 # It is suggested that m4 or c4 instances are used, as these
 # there is no additional cost to support EBS optimization.
+# If a non-EBS optimzied instance is used, make sure to set
+# gateway_instance_ebs_optimized to false.
 gateway_instance_type: m4.large
 
 # gateway_instance_count is the number of instances to deploy
@@ -110,12 +118,17 @@ gateway_instance_count: 1
 # disk is a gp2 EBS volume, not instance storage.
 gateway_instance_root_disk_size_gb: 32
 
+# gateway_instance_ebs_optimized controls whether or not the instance
+# is provisioned as an EBS-optimized instance. This defaults to true.
+gateway_instance_ebs_optimized: true
+
 # controller_instance_type is the instance type used when deploying
 # EC2 instances for the Kubernetes control plane.
 #
-# These instances must support the EBS-optimized boot flag.
 # It is suggested that m4 or c4 instances are used, as these
 # there is no additional cost to support EBS optimization.
+# If a non-EBS optimzied instance is used, make sure to set
+# controller_instance_ebs_optimized to false.
 controller_instance_type: m4.large
 
 # controller_instance_count is the number of instances to deploy
@@ -127,12 +140,17 @@ controller_instance_count: 3
 # disk is a gp2 EBS volume, not instance storage.
 controller_instance_root_disk_size_gb: 32
 
+# controller_instance_ebs_optimized controls whether or not the instance
+# is provisioned as an EBS-optimized instance. This defaults to true.
+controller_instance_ebs_optimized: true
+
 # worker_instance_type is the instance type used when deploying
 # EC2 instances for the Kubernetes worker pool.
 #
-# These instances must support the EBS-optimized boot flag.
 # It is suggested that m4 or c4 instances are used, as these
 # there is no additional cost to support EBS optimization.
+# If a non-EBS optimzied instance is used, make sure to set
+# worker_instance_ebs_optimized to false.
 worker_instance_type: c4.large
 
 # worker_instance_count is the number of instances to deploy
@@ -144,6 +162,10 @@ worker_instance_count: 3
 # disk provisioned for each worker instance (in GB). The underlying
 # disk is an io1 EBS volume, not instance storage.
 worker_instance_root_disk_size_gb: 64
+
+# worker_instance_ebs_optimized controls whether or not the instance
+# is provisioned as an EBS-optimized instance. This defaults to true.
+worker_instance_ebs_optimized: true
 
 # cluster_vpc_id is the ID of the VPC into which the Kubernetes
 # cluster should be deployed. This VPC must already have an
@@ -243,17 +265,6 @@ signalfx_enabled: false
 # Only used if signalfx_enabled is true.
 #signalfx_api_key:
 
-# logstash_enabled controls whether or not log data is collected and
-# forwarded via logstash to an elasticsearch cluster. If true,
-# logstash_elasticsearch_host must be set.
-logstash_enabled: false
-
-# logstash_elasticsearch_host is the <scheme>://<host> representing an
-# elasticsearch cluster where logstash should send its logs. The
-# scheme should typically be https. This field is only used if
-# logstash_enabled is true.
-#logstash_elasticsearch_host:
-
 # logspout_enabled controls whether or not log data is collected and forwarded
 # to a remote syslog server. If true, logspout_syslog_host must be set.
 logspout_enabled: false
@@ -262,3 +273,7 @@ logspout_enabled: false
 # server where logspout should send its logs. This field is only used if
 # logspout_enabled is true.
 #logspout_syslog_host:
+
+# kubernetes_log_verbose controls whether or not the Kubernetes components
+# log at a high level of verbosity or not.
+kubernetes_log_verbose: false

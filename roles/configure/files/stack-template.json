@@ -1217,6 +1217,9 @@
         "UserData": {
           "Ref": "ControllerUserData"
         },
+        "EbsOptimized": {
+          "Ref": "ControllerEbsOptimized"
+        },
         "BlockDeviceMappings": [
           {
             "DeviceName": "/dev/xvda",
@@ -1350,7 +1353,9 @@
         "UserData": {
           "Ref": "WorkerUserData"
         },
-        "EbsOptimized": true,
+        "EbsOptimized": {
+          "Ref": "WorkerEbsOptimized"
+        },
         "BlockDeviceMappings": [
           {
             "DeviceName": "/dev/xvda",
@@ -2240,7 +2245,9 @@
         "UserData": {
           "Ref": "BastionUserData"
         },
-        "EbsOptimized": true,
+        "EbsOptimized": {
+          "Ref": "BastionEbsOptimized"
+        },
         "BlockDeviceMappings": [
           {
             "DeviceName": "/dev/xvda",
@@ -2442,230 +2449,6 @@
         }
       }
     },
-    "AggregatorDNSRecordSet": {
-      "Type": "AWS::Route53::RecordSet",
-      "Properties": {
-        "HostedZoneName": {
-          "Fn::Join": [
-            "",
-            [
-              {
-                "Ref": "HostedZone"
-              },
-              "."
-            ]
-          ]
-        },
-        "Name": {
-          "Fn::Join": [
-            "",
-            [
-              "logs.",
-              {
-                "Ref": "HostedZone"
-              },
-              "."
-            ]
-          ]
-        },
-        "Type": "A",
-        "TTL": "300",
-        "ResourceRecords": [
-          {
-            "Fn::GetAtt": [
-              "AggregatorInstance",
-              "PrivateIp"
-            ]
-          }
-        ]
-      },
-      "DependsOn": [
-        "ClusterHostedZone"
-      ]
-    },
-    "AggregatorNetworkInterface": {
-      "Type": "AWS::EC2::NetworkInterface",
-      "Properties": {
-        "SubnetId": {
-          "Ref": "ControllerSubnet"
-        },
-        "GroupSet": [
-          {
-            "Fn::GetAtt": [
-              "AggregatorSecurityGroup",
-              "GroupId"
-            ]
-          }
-        ]
-      }
-    },
-    "AggregatorInstance": {
-      "Type": "AWS::EC2::Instance",
-      "Properties": {
-        "NetworkInterfaces": [
-          {
-            "NetworkInterfaceId": {
-              "Ref": "AggregatorNetworkInterface"
-            },
-            "DeviceIndex": 0
-          }
-        ],
-        "ImageId": {
-          "Ref": "CoreOSImageID"
-        },
-        "InstanceType": {
-          "Ref": "AggregatorInstanceType"
-        },
-        "IamInstanceProfile": {
-          "Ref": "AggregatorIAMInstanceProfile"
-        },
-        "UserData": {
-          "Ref": "AggregatorUserData"
-        },
-        "EbsOptimized": true,
-        "BlockDeviceMappings": [
-          {
-            "DeviceName": "/dev/xvda",
-            "Ebs": {
-              "VolumeSize": {
-                "Ref": "AggregatorInstanceRootDiskSize"
-              },
-              "VolumeType": "gp2",
-              "DeleteOnTermination": true
-            }
-          }
-        ],
-        "Tags": [
-          {
-            "Key": "KubernetesCluster",
-            "Value": {
-              "Ref": "ClusterName"
-            }
-          },
-          {
-            "Key": "group",
-            "Value": "aggregator"
-          }
-	    ]
-      }
-    },
-    "AggregatorSecurityGroup": {
-      "Type": "AWS::EC2::SecurityGroup",
-      "Properties": {
-        "GroupDescription": "AggregatorSecurityGroup",
-        "VpcId": {
-          "Ref": "ClusterVPC"
-        },
-        "SecurityGroupEgress": [
-          {
-            "IpProtocol": "TCP",
-            "FromPort": 0,
-            "ToPort": 65535,
-            "CidrIp": "0.0.0.0/0"
-          },
-          {
-            "IpProtocol": "UDP",
-            "FromPort": 0,
-            "ToPort": 65535,
-            "CidrIp": "0.0.0.0/0"
-          },
-          {
-            "IpProtocol": "ICMP",
-            "FromPort": -1,
-            "ToPort": -1,
-            "CidrIp": "0.0.0.0/0"
-          }
-        ],
-        "SecurityGroupIngress": [
-          {
-            "IpProtocol": "ICMP",
-            "FromPort": -1,
-            "ToPort": -1,
-            "CidrIp": "0.0.0.0/0"
-          },
-          {
-            "IpProtocol": "TCP",
-            "FromPort": 22,
-            "ToPort": 22,
-            "CidrIp": "0.0.0.0/0"
-          },
-          {
-            "IpProtocol": "TCP",
-            "FromPort": 4194,
-            "ToPort": 4194,
-            "CidrIp": "0.0.0.0/0"
-          },
-          {
-            "IpProtocol": "TCP",
-            "FromPort": 19532,
-            "ToPort": 19532,
-            "CidrIp": {
-              "Ref": "ClusterNetworkCIDR"
-            }
-          }
-        ]
-      }
-    },
-    "AggregatorIAMInstanceProfile": {
-      "Type": "AWS::IAM::InstanceProfile",
-      "Properties": {
-        "Path": "/",
-        "Roles": [
-          {
-            "Ref": "AggregatorIAMRole"
-          }
-        ]
-      },
-      "Metadata": {
-        "AWS::CloudFormation::Designer": {
-          "id": "39d0a20d-1063-4d2b-9109-27cbf321ddcd"
-        }
-      }
-    },
-    "AggregatorIAMRole": {
-      "Type": "AWS::IAM::Role",
-      "Properties": {
-        "Path": "/",
-        "Policies": [
-          {
-            "PolicyName": "kubernetes-describe-instances",
-            "PolicyDocument": {
-              "Version": "2012-10-17",
-              "Statement": [
-                {
-                  "Effect": "Allow",
-                  "Action": [
-                    "ec2:DescribeInstances"
-                  ],
-                  "Resource": "*"
-                }
-              ]
-            }
-          }
-        ],
-        "AssumeRolePolicyDocument": {
-          "Version": "2012-10-17",
-          "Statement": [
-            {
-              "Effect": "Allow",
-              "Principal": {
-                "Service": [
-                  "ec2.amazonaws.com"
-                ]
-              },
-              "Action": [
-                "sts:AssumeRole"
-              ]
-            }
-          ]
-        }
-      },
-      "Metadata": {
-        "AWS::CloudFormation::Designer": {
-          "id": "b0f95c49-7207-4b33-b319-226f6653b599"
-        }
-      }
-    },
     "PublicSubnet": {
       "Type": "AWS::EC2::Subnet",
       "Properties": {
@@ -2769,7 +2552,9 @@
         "UserData": {
           "Ref": "GatewayUserData"
         },
-        "EbsOptimized": true,
+        "EbsOptimized": {
+          "Ref": "GatewayEbsOptimized"
+        },
         "BlockDeviceMappings": [
           {
             "DeviceName": "/dev/xvda",
@@ -3241,11 +3026,6 @@
       "Description": "Launch the Bastion EC2 Instance using this Instance type",
       "Default": "m3.medium"
     },
-    "AggregatorInstanceType": {
-      "Type": "String",
-      "Description": "Launch the Aggregator EC2 Instance using this Instance type",
-      "Default": "m3.medium"
-    },
     "AvailabilityZone": {
       "Type": "AWS::EC2::AvailabilityZone::Name",
       "Description": "Deploy all resources into this AvailabilityZone"
@@ -3314,13 +3094,9 @@
       "Type": "Number",
       "Description": "Size in GB of Bastion EC2 Instance root disk."
     },
-    "AggregatorUserData": {
+    "BastionEbsOptimized": {
       "Type": "String",
-      "Description": "Launch Aggregator EC2 Instances with this UserData"
-    },
-    "AggregatorInstanceRootDiskSize": {
-      "Type": "Number",
-      "Description": "Size in GB of Aggregator EC2 Instance root disk."
+      "Description": "Enable optimized EBS I/O"
     },
     "ControllerInstanceCount": {
       "Type": "Number",
@@ -3330,6 +3106,10 @@
       "Type": "Number",
       "Description": "Size in GB of Controller EC2 Instance root disk."
     },
+    "ControllerEbsOptimized": {
+      "Type": "String",
+      "Description": "Enable optimized EBS I/O"
+    },
     "GatewayInstanceCount": {
       "Type": "Number",
       "Description": "Number of EC2 Instances to provision as Gateways."
@@ -3337,6 +3117,10 @@
     "GatewayInstanceRootDiskSize": {
       "Type": "Number",
       "Description": "Size in GB of Gateway EC2 Instance root disk."
+    },
+    "GatewayEbsOptimized": {
+      "Type": "String",
+      "Description": "Enable optimized EBS I/O"
     },
     "WorkerInstanceCount": {
       "Type": "Number",
@@ -3349,6 +3133,10 @@
     "WorkerInstanceRootDiskIOPs": {
       "Type": "Number",
       "Description": "Number of IOPs to provision for the Worker EC2 Instance root disk."
+    },
+    "WorkerEbsOptimized": {
+      "Type": "String",
+      "Description": "Enable optimized EBS I/O"
     },
     "HostedZone": {
       "Type": "String",
