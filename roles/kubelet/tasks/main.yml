@@ -79,23 +79,12 @@
   service: name=docker.socket state=started enabled=yes
   sudo: true
 
-- name: deploy kube-datadog
+- name: deploy datadog
   when: datadog_enabled
   template: src={{ item.src }}.j2 dest={{ item.dest }}/{{ item.src }} mode=0644
   sudo: true
   with_items:
-  - src: "kube-datadog.yml"
-    dest: "/etc/kubernetes/manifests"
-
-# Only deploy the datadog-agent when datadog_statsd_host is pointed to
-# localhost on the standard port. From klondike's perspective, this indicates
-# a regular datadog-agent deployment.
-- name: deploy datadog-agent
-  when: (datadog_enabled and datadog_statsd_host == "127.0.0.1:8125")
-  template: src={{ item.src }}.j2 dest={{ item.dest }}/{{ item.src }} mode=0644
-  sudo: true
-  with_items:
-  - src: "datadog-agent.yml"
+  - src: "datadog.yml"
     dest: "/etc/kubernetes/manifests"
 
 - name: deploy logspout

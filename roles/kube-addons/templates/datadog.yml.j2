@@ -29,3 +29,13 @@ spec:
         - containerPort: 8125
           name: dogstatsdport
           protocol: TCP
+      - image: {{ kube_datadog_image }}
+        name: kube-datadog
+        imagePullPolicy: Always
+        env:
+        - name: KUBE_DATADOG_TAGS
+          value: "KubernetesCluster:{{ cluster }},KubernetesClusterRole:cluster"
+        - name: KUBE_DATADOG_SOURCE
+          value: api
+        - name: KUBE_DATADOG_DOGSTATSD
+          value: {{ datadog_statsd_host }}

@@ -21,22 +21,8 @@
   with_items:
   - kube-system.yml
   - dns.yml
+  - datadog.yml
   - dashboard.yml
-
-- name: deploy kube-datadog
-  include: deploy.yml
-  when: datadog_enabled
-  with_items:
-  - kube-datadog.yml
-
-# Only deploy the datadog-agent when datadog_statsd_host is pointed to
-# localhost on the standard port. From klondike's perspective, this indicates
-# a regular datadog-agent deployment.
-- name: deploy datadog-agent
-  include: deploy.yml
-  when: (datadog_enabled and datadog_statsd_host == "127.0.0.1:8125")
-  with_items:
-  - datadog-agent.yml
 
 - name: deploy signalfx
   include: deploy.yml
