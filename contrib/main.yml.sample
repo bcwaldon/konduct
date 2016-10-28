@@ -274,10 +274,6 @@ logspout_enabled: false
 # logspout_enabled is true.
 #logspout_syslog_host:
 
-# kubernetes_version represents the version of hyperkube and kubelet that will
-# get deployed. Modify this at your own risk!
-kubernetes_version: 1.2.2
-
 # kubernetes_log_verbose controls whether or not the Kubernetes components
 # log at a high level of verbosity or not.
 kubernetes_log_verbose: false
