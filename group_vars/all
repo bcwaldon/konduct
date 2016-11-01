@@ -4,7 +4,7 @@ control_plane_endpoint: "https://api.{{ aws_hosted_zone }}"
 
 ca_name: kubernetes
 
-datadog_agent_image: datadog/docker-dd-agent:kubernetes
+datadog_agent_image: quay.io/jkearney/docker-dd-agent:kubernetes
 
 kubelet_enable_pod_proxy: true
 
