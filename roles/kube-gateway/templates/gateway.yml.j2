@@ -34,7 +34,7 @@ spec:
         value: "KubernetesCluster:{{ cluster }},KubernetesClusterRole:{{ cluster_role }}"
 {% if datadog_statsd_host is defined and datadog_statsd_port is defined %}
       - name: STATSD_HOST
-        value: {{ datadog_statsd_host }}
+        value: "{{ datadog_statsd_host }}"
       - name: STATSD_PORT
         value: {{ datadog_statsd_port }}
 {% endif %}
