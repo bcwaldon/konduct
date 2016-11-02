@@ -36,7 +36,7 @@ spec:
       - name: STATSD_HOST
         value: "{{ datadog_statsd_host }}"
       - name: STATSD_PORT
-        value: {{ datadog_statsd_port }}
+        value: "{{ datadog_statsd_port }}"
 {% endif %}
     volumeMounts:
       - name: dockersocket
