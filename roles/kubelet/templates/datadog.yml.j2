@@ -5,7 +5,7 @@ metadata:
   namespace: kube-system
 spec:
   containers:
-  - image: "{{ datadog_agent_image }}"
+  - image: {{ datadog_agent_image }}
     name: datadog-agent
     imagePullPolicy: Always
     ports:
