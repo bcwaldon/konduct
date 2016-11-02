@@ -248,11 +248,11 @@ datadog_enabled: false
 
 # datadog_statsd_host is the host of the DataDog statsd endpoint. Modify this
 # only if you are forwarding to an external statsd server.
-datadog_statsd_host: 127.0.0.1
+#datadog_statsd_host:
 
 # datadog_statsd_port is the port of the DataDog statsd endpoint. Modify this
 # only if you are forwarding to an external statsd server.
-datadog_statsd_port: 8125
+#datadog_statsd_port:
 
 # datadog_api_key is the API key that the DataDog agent will use to
 # push metrics about the Kubernetes cluster to the DataDog service.
