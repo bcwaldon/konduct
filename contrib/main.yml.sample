@@ -246,6 +246,11 @@ peer_connection_id:
 # deployed across the cluster. If true, datadog_api_key must be set.
 datadog_enabled: false
 
+# datadog_api_key is the API key that the DataDog agent will use to
+# push metrics about the Kubernetes cluster to the DataDog service.
+# Only used if datadog_enabled is true.
+#datadog_api_key:
+
 # datadog_statsd_host is the host of the DataDog statsd endpoint. Modify this
 # only if you are forwarding to an external statsd server.
 #datadog_statsd_host:
@@ -253,11 +258,6 @@ datadog_enabled: false
 # datadog_statsd_port is the port of the DataDog statsd endpoint. Modify this
 # only if you are forwarding to an external statsd server.
 #datadog_statsd_port:
-
-# datadog_api_key is the API key that the DataDog agent will use to
-# push metrics about the Kubernetes cluster to the DataDog service.
-# Only used if datadog_enabled is true.
-#datadog_api_key:
 
 # signalfx_enabled controls whether or not the SignalFX agent should be
 # deployed to the cluster. If true, signalfx_api_key must be set.
