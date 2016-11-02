@@ -17,9 +17,9 @@ spec:
       - name: TAGS
         value: "KubernetesCluster:{{ cluster }},KubernetesClusterRole:{{ cluster_role }}"
       - name: STATSD_HOST
-        value: {{ datadog_statsd_host|default('') }}
+        value: {{ datadog_statsd_host }}
       - name: STATSD_PORT
-        value: {{ datadog_statsd_port|default('') }}
+        value: {{ datadog_statsd_port }}
     volumeMounts:
       - name: dockersocket
         mountPath: /var/run/docker.sock
