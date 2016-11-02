@@ -19,7 +19,7 @@ spec:
     - name: SYSLOG_HOSTNAME
       value: '{% raw %}{{ index .Container.Config.Labels "io.kubernetes.pod.namespace" }}{% endraw %}'
     - name: SYSLOG_TAG
-      value: 'klondike-{{ cluster }}-{% raw %}{{ index .Container.Config.Labels "io.kubernetes.pod.namespace" }}{% endraw %}'
+      value: 'klondike-{{ cluster }}-{% raw %}{{ index .Container.Config.Labels "io.kubernetes.pod.namespace" }}-{{ index .Container.Config.Labels "io.kubernetes.pod.name" }}{% endraw %}'
   volumes:
   - name: docker-sock
     hostPath:
