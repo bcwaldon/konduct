@@ -21,7 +21,7 @@ spec:
     - mountPath: /etc/kubernetes
       name: etc-kubernetes
 {% if datadog_enabled == true %}
-  - image: datadog/docker-dd-agent:latest
+  - image: {{ datadog_agent_image }}
     name: datadog-agent
     imagePullPolicy: Always
     ports:
@@ -32,6 +32,10 @@ spec:
         value: "{{ datadog_api_key }}"
       - name: TAGS
         value: "KubernetesCluster:{{ cluster }},KubernetesClusterRole:{{ cluster_role }}"
+      - name: STATSD_HOST
+        value: {{ datadog_statsd_host|default('') }}
+      - name: STATSD_PORT
+        value: {{ datadog_statsd_port|default('') }}
     volumeMounts:
       - name: dockersocket
         mountPath: /var/run/docker.sock
