@@ -251,14 +251,6 @@ datadog_enabled: false
 # Only used if datadog_enabled is true.
 #datadog_api_key:
 
-# datadog_statsd_host is the host of the DataDog statsd endpoint. Modify this
-# only if you are forwarding to an external statsd server.
-#datadog_statsd_host:
-
-# datadog_statsd_port is the port of the DataDog statsd endpoint. Modify this
-# only if you are forwarding to an external statsd server.
-#datadog_statsd_port:
-
 # signalfx_enabled controls whether or not the SignalFX agent should be
 # deployed to the cluster. If true, signalfx_api_key must be set.
 signalfx_enabled: false
