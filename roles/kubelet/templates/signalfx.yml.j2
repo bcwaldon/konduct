@@ -4,6 +4,7 @@ metadata:
   name: signalfx-collectd
   namespace: kube-system
 spec:
+  hostNetwork: true
   containers:
   - image: quay.io/signalfuse/collectd:latest
     name: signalfx-collectd
