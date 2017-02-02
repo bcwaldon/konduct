@@ -32,6 +32,8 @@ error_log {{ .NGINXConfig.ErrorLog }};
 daemon on;
 worker_processes auto;
 
+client_max_body_size {{ .NGINXConfig.MaxBodySize }};
+
 events {
     worker_connections 512;
 }
@@ -133,6 +135,7 @@ stream {
 		HealthPort:  7332,
 		AccessLog:   "/dev/stdout",
 		ErrorLog:    "/dev/stderr",
+		MaxBodySize: "10m",
 	}
 )
 
@@ -150,6 +153,7 @@ type NGINXConfig struct {
 	ListenPort  int
 	ErrorLog    string
 	AccessLog   string
+	MaxBodySize string
 }
 
 func newNGINXConfig(hp int, cz string, errorLog string, accessLog string) NGINXConfig {
