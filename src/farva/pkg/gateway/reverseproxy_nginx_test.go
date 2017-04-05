@@ -55,6 +55,8 @@ error_log /dev/stderr;
 daemon on;
 worker_processes auto;
 
+client_max_body_size 10m;
+
 events {
     worker_connections 512;
 }
@@ -152,6 +154,8 @@ pid /var/run/nginx.pid;
 error_log /dev/stderr;
 daemon on;
 worker_processes auto;
+
+client_max_body_size 10m;
 
 events {
     worker_connections 512;
@@ -285,6 +289,8 @@ error_log /dev/stderr;
 daemon on;
 worker_processes auto;
 
+client_max_body_size 10m;
+
 events {
     worker_connections 512;
 }
@@ -417,6 +423,8 @@ error_log /dev/stderr;
 daemon on;
 worker_processes auto;
 
+client_max_body_size 10m;
+
 events {
     worker_connections 512;
 }
@@ -496,6 +504,8 @@ error_log /dev/stderr;
 daemon on;
 worker_processes auto;
 
+client_max_body_size 10m;
+
 events {
     worker_connections 512;
 }
@@ -570,6 +580,8 @@ pid /var/run/nginx.pid;
 error_log /dev/stderr;
 daemon on;
 worker_processes auto;
+
+client_max_body_size 10m;
 
 events {
     worker_connections 512;
@@ -650,6 +662,8 @@ pid /var/run/nginx.pid;
 error_log /dev/stderr;
 daemon on;
 worker_processes auto;
+
+client_max_body_size 10m;
 
 events {
     worker_connections 512;

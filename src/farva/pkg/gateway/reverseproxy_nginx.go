@@ -32,6 +32,8 @@ error_log {{ .NGINXConfig.ErrorLog }};
 daemon on;
 worker_processes auto;
 
+client_max_body_size {{ .NGINXConfig.MaxBodySize }};
+
 events {
     worker_connections 512;
 }
